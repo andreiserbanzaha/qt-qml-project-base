@@ -1,1 +1,0 @@
-# qt-qml-base-project
