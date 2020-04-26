@@ -35,10 +35,6 @@ set(QT5_LIBS
 # src
 file(GLOB P_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
-# add QML to project tree
-file(GLOB P_QML ${CMAKE_CURRENT_SOURCE_DIR}/qml/*.qml)
-add_custom_target(qml SOURCES ${P_QML})
-
 # create executable project
 add_executable(${PROJECT_NAME} ${P_SRC})
 
@@ -47,8 +43,4 @@ target_link_libraries(${PROJECT_NAME} ${QT5_LIBS})
 # install binary
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
-# install QML files
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qml
-    DESTINATION bin
-    FILES_MATCHING PATTERN "*.qml"
-    )
+add_subdirectory(qml)
