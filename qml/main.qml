@@ -2,7 +2,8 @@ import QtQuick 2.6
 
 Rectangle
 {
-	width: 640
-	height: 480
+    anchors.centerIn: parent
+    width: 1280
+    height: 720
     color: "lightgrey"
 }
