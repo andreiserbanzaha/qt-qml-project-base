@@ -32,11 +32,14 @@ set(QT5_LIBS
     ${Qt5Quick_LIBRARIES}
     )
 
+# inc
+file(GLOB P_INC ${CMAKE_CURRENT_SOURCE_DIR}/inc/*.h)
+
 # src
 file(GLOB P_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 # create executable project
-add_executable(${PROJECT_NAME} ${P_SRC})
+add_executable(${PROJECT_NAME} ${P_INC} ${P_SRC})
 
 target_link_libraries(${PROJECT_NAME} ${QT5_LIBS})
 
