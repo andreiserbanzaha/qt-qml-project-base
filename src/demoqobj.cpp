@@ -1,4 +1,4 @@
-#include "../inc/demoqobj.h"
+#include <demoqml/demoqobj.h>
 
 int DemoQObject::data() const
 {

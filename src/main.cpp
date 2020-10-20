@@ -1,10 +1,10 @@
+#include <demoqml/demoqobj.h>
+
 #include <QGuiApplication>
 #include <QQuickView>
 #include <QString>
 #include <QUrl>
 #include <QDir>
-#include <iostream>
-#include "../inc/demoqobj.h"
 
 int main(int argc, char** argv)
 {

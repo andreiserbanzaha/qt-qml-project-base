@@ -1,49 +1,50 @@
 cmake_minimum_required(VERSION 3.13.4)
 
-project(qt-qml-base-project)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+project(qt-qml-base-project 
+  LANGUAGES CXX
+  VERSION 1.0.0
+  DESCRIPTION "Qt5 startup project"
+ )
 
 # qt config
 set(QT_TARGET_VERSION 5.12)
 
-find_package(Qt5Core ${QT_TARGET_VERSION} REQUIRED)
-find_package(Qt5Gui ${QT_TARGET_VERSION} REQUIRED)
-find_package(Qt5Quick ${QT_TARGET_VERSION} REQUIRED)
-
-add_definitions(${Qt5Core_DEFINITIONS})
-add_definitions(${Qt5Gui_DEFINITIONS})
-add_definitions(${Qt5Quick_DEFINITIONS})
-
-include_directories(SYSTEM ${Qt5Core_INCLUDE_DIRS})
-include_directories(SYSTEM ${Qt5Gui_INCLUDE_DIRS})
-include_directories(SYSTEM ${Qt5Quick_INCLUDE_DIRS})
+find_package(Qt5 ${QT_TARGET_VERSION} COMPONENTS Core Gui Quick REQUIRED)
 
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 
-add_definitions(-DQT_NO_VERSION_TAGGING)
-
-set(QT5_LIBS
-    ${Qt5Core_LIBRARIES}
-    ${Qt5Gui_LIBRARIES}
-    ${Qt5Quick_LIBRARIES}
-    )
+add_library(${PROJECT_NAME}_interface INTERFACE)
+target_compile_definitions(${PROJECT_NAME}_interface INTERFACE QT_NO_VERSION_TAGGING)
+set_target_properties(${PROJECT_NAME}_interface PROPERTIES INTERFACE_POSITION_INDEPENDENT_CODE ON)
 
 # inc
-file(GLOB P_INC ${CMAKE_CURRENT_SOURCE_DIR}/inc/*.h)
-
+file(GLOB P_INC ${CMAKE_CURRENT_SOURCE_DIR}/inc/demoqml/*.h)
 # src
 file(GLOB P_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 # create executable project
 add_executable(${PROJECT_NAME} ${P_INC} ${P_SRC})
 
-target_link_libraries(${PROJECT_NAME} ${QT5_LIBS})
+target_include_directories(${PROJECT_NAME} PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+  $<INSTALL_INTERFACE:inc>
+)
 
-# install binary
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  ${PROJECT_NAME}_interface
+  Qt5::Core
+  Qt5::Quick
+  Qt5::Gui
+)
 
 add_subdirectory(qml)
+
+# install binary
+include(GNUInstallDirs)
+install(
+  TARGETS
+    ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}-targets
+  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
