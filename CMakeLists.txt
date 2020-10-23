@@ -23,6 +23,8 @@ file(GLOB P_INC ${CMAKE_CURRENT_SOURCE_DIR}/inc/demoqml/*.h)
 # src
 file(GLOB P_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
+set(_${PROJECT_NAME}_CXX_GENERATED_PATH "${CMAKE_CURRENT_BINARY_DIR}/generated/demoqml")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/templ/version.h.in ${_${PROJECT_NAME}_CXX_GENERATED_PATH}/version.h @ONLY)
 # create executable project
 add_executable(${PROJECT_NAME} ${P_INC} ${P_SRC})
 
@@ -40,11 +42,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 add_subdirectory(qml)
 
-# install binary
-include(GNUInstallDirs)
-install(
-  TARGETS
-    ${PROJECT_NAME}
-  EXPORT ${PROJECT_NAME}-targets
-  DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeInstall.cmake)
+
+include(${CMAKE_CURRENT_LIST_DIR}/CPack.cmake)
